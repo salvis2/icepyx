@@ -54,7 +54,7 @@ jobs:
         run: |
           git checkout --orphan ${{ steps.parse.outputs.binderbot_target_branch }}
           git add examples/
-          ls -a
+          ls examples/
       - name: Build notebooks using Binderbot
         run: |
           python -m binderbot.cli \
@@ -62,7 +62,7 @@ jobs:
           --repo ${{ steps.parse.outputs.binder_repo }} \
           --ref ${{ steps.parse.outputs.binder_ref }} \
           --output-dir / \
-          **.ipynb
+          examples/*.ipynb
       - name: Commit files
         if: github.ref == 'refs/heads/master'
         run: |
