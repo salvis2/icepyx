@@ -8,7 +8,7 @@ on:
       - development
       - master
     paths:
-      - '**.ipynb'
+      - 'examples/*.ipynb'
       - 'binder-gallery.yaml'
       - 'doc/source/_static/icepyx_logo.png'
   pull_request:
@@ -17,7 +17,7 @@ on:
       - development
       - master
     paths:
-      - '**.ipynb'
+      - 'examples/*.ipynb'
       - 'binder-gallery.yaml'
       - 'doc/source/_static/icepyx_logo.png'
 
@@ -54,6 +54,7 @@ jobs:
         run: |
           git checkout --orphan ${{ steps.parse.outputs.binderbot_target_branch }}
           git rm --cached -r .
+          ls -a
       - name: Build notebooks using Binderbot
         run: |
           python -m binderbot.cli \
@@ -61,13 +62,13 @@ jobs:
           --repo ${{ steps.parse.outputs.binder_repo }} \
           --ref ${{ steps.parse.outputs.binder_ref }} \
           --output-dir / \
-          **.ipynb
+          examples/*.ipynb
       - name: Commit files
         if: github.ref == 'refs/heads/master'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add binder-gallery.yaml doc/source/_static/icepyx_logo.png **.ipynb
+          git add binder-gallery.yaml doc/source/_static/icepyx_logo.png examples/*.ipynb
           git commit -m "Binderbot output"
       - name: Push commit
         if: github.ref == 'refs/heads/master'
